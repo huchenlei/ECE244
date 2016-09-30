@@ -1,0 +1,17 @@
+* typedef
+  typedef struct something{
+   ...
+   ...
+  } something
+  "something" would replace "struct something"
+
+* .h and .cc/.cpp file
+  all could be included by "#include"
+  but only .h is recommended to be included(saving the compilation time)
+
+* struts(classes) and functions can not be decleared twice
+  avoid including the same .h file more than once
+
+* #ifndef(if not defined)
+  should be paired by #endif
+  prevent multiple inclusion

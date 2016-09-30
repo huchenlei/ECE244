@@ -1,0 +1,18 @@
+* Lifecycle
+  Preprocess(g++ -E)
+  Macro substitution
+  Stripping comments
+  file inclusion
+
+  Compilation(g++ -S)
+  Input: c++; Output: assembly code
+
+  Assembly: g++ -c
+  Input: assembly code; Output: binary code(object file)
+
+  Linking:
+  Input: object file: Output: executable file
+  Symbol resolution
+  Relocation
+
+#pragma once (easier way)

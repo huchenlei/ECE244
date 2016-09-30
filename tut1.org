@@ -1,0 +1,4 @@
+* pointers
+  int* a, b;
+ =int *a;
+  int b;

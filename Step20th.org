@@ -1,0 +1,8 @@
+* Make
+  target: dependencies
+  [tab] system command
+
+why not using md5 value?
+
+* open for append
+  outFile.open("filename", ios::app)

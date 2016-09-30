@@ -1,0 +1,19 @@
+gcc -c -g -Wall  main.c
+gcc -c -g -Wall  util.c
+gcc -c -g -Wall  read_netlist.c
+gcc -c -g -Wall  print_netlist.c
+gcc -c -g -Wall  check_netlist.c
+gcc -c -g -Wall  read_arch.c
+gcc -c -g -Wall  place_and_route.c
+gcc -c -g -Wall  place.c
+gcc -c -g -Wall  route_common.c
+gcc -c -g -Wall  route_timing.c
+gcc -c -g -Wall  route_tree_timing.c
+gcc -c -g -Wall  route_breadth_first.c
+gcc -c -g -Wall  draw.c
+gcc -c -g -Wall  -I/usr/openwin/include graphics.c
+graphics.c:13:10: fatal error: 'X11/Xlib.h' file not found
+#include <X11/Xlib.h>
+         ^
+1 error generated.
+make: *** [graphics.o] Error 1
