@@ -1,0 +1,93 @@
+> maxVal 0 1
+Error: maxVal arguments must be greater than 0
+> maxVal 6 7
+New network: max node number is 6; max resistors is 7
+> insertR R0 100.1 0 1
+Inserted: resistor R0 100.10 Ohms 0 -> 1
+> insertR R0 333.33 0 2
+Error: resistor R0 already exists
+> insertR R1 110.001 0 2
+Inserted: resistor R1 110.00 Ohms 0 -> 2
+> insertR R2 120 0 3
+Inserted: resistor R2 120.00 Ohms 0 -> 3
+> insertR R3 130 0 4
+Inserted: resistor R3 130.00 Ohms 0 -> 4
+> insertR R4 140 0 5
+Inserted: resistor R4 140.00 Ohms 0 -> 5
+> insertR R5 150 0 6
+Error: node is full
+> insertR R6 160 1 7
+Error: node 7 is out of permitted range 0-6
+> insertR R7 170 1 5
+Inserted: resistor R7 170.00 Ohms 1 -> 5
+> insertR R8 180 4 3
+Inserted: resistor R8 180.00 Ohms 4 -> 3
+> insertR R9 190 2 4
+Error: resistor array is full
+> printR R8
+Print:
+R8 180.00 Ohms 4 -> 3
+> printR R9
+Error: resistor R9 not found
+> printR all
+Print:
+R0 100.10 Ohms 0 -> 1
+R1 110.00 Ohms 0 -> 2
+R2 120.00 Ohms 0 -> 3
+R3 130.00 Ohms 0 -> 4
+R4 140.00 Ohms 0 -> 5
+R7 170.00 Ohms 1 -> 5
+R8 180.00 Ohms 4 -> 3
+> printNode 1
+Print:
+Connections at node 1: 2 resistor(s)
+R0 100.10 Ohms 0 -> 1
+R7 170.00 Ohms 1 -> 5
+> printNode all
+Print:
+Connections at node 0: 5 resistor(s)
+R0 100.10 Ohms 0 -> 1
+R1 110.00 Ohms 0 -> 2
+R2 120.00 Ohms 0 -> 3
+R3 130.00 Ohms 0 -> 4
+R4 140.00 Ohms 0 -> 5
+Connections at node 1: 2 resistor(s)
+R0 100.10 Ohms 0 -> 1
+R7 170.00 Ohms 1 -> 5
+Connections at node 2: 1 resistor(s)
+R1 110.00 Ohms 0 -> 2
+Connections at node 3: 2 resistor(s)
+R2 120.00 Ohms 0 -> 3
+R8 180.00 Ohms 4 -> 3
+Connections at node 4: 2 resistor(s)
+R3 130.00 Ohms 0 -> 4
+R8 180.00 Ohms 4 -> 3
+Connections at node 5: 2 resistor(s)
+R4 140.00 Ohms 0 -> 5
+R7 170.00 Ohms 1 -> 5
+Connections at node 6: 0 resistor(s)
+> modifyR R3 2.5
+Modified: resistor R3 from 130.00 Ohms to 2.50 Ohms
+> printR R3
+Print:
+R3 2.50 Ohms 0 -> 4
+> maxVal 3 4
+New network: max node number is 3; max resistors is 4
+> printNode all
+Print:
+Connections at node 0: 0 resistor(s)
+Connections at node 1: 0 resistor(s)
+Connections at node 2: 0 resistor(s)
+Connections at node 3: 0 resistor(s)
+> insertR bigres 1000 2 3
+Inserted: resistor bigres 1000.00 Ohms 2 -> 3
+> insertR smallres 0.05 2 4
+Error: node 4 is out of permitted range 0-3
+> printR all
+Print:
+bigres 1000.00 Ohms 2 -> 3
+> deleteR all
+Deleted: all resistors
+> printR all
+Print:
+>
