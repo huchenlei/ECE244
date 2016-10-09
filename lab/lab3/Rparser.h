@@ -29,7 +29,7 @@ public:
 
     void insert_resistor(string &name, double resistance, int node1, int node2);
 
-    void modify_resistor(string &name, double resistance);
+    double modify_resistor(string &name, double resistance);
 
     void delete_resistor(string &name);
 
@@ -39,11 +39,11 @@ public:
 
     bool node_array_contains(int nodeIndex);
 
-    Node find_node_by_index(int nodeIndex);
+    Node* find_node_by_index(int nodeIndex);
 
-    Resistor find_resistor_by_name (string &name);
+    Resistor* find_resistor_by_name (string &name);
 
-    Resistor find_resistor_by_index(int rIndex);
+    Resistor* find_resistor_by_index(int rIndex);
 
     string resistor_info(string &name);
 

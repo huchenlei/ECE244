@@ -24,8 +24,10 @@ private:
     int nodeIndex;
     int numRes; // number of resistors currently connected
     int resIDArray[MAX_RESISTORS_PER_NODE]; // stores the index of each resistor connected
+    bool empty = true;
 
 public:
+
     static int maxNodeNumber;
 
     Node();
@@ -48,8 +50,6 @@ public:
     // nodeIndex is the position of this node in the node array.
     void print(int nodeIndex);
 
-    string nodeInfo();
-
     int getNodeIndex() const;
 
     void setNodeIndex(int nodeIndex);
@@ -59,6 +59,10 @@ public:
     void setNumRes(int numRes);
 
     int *getResIDArray();
+
+    bool isEmpty() const;
+
+    void reset();
 
 };
 

@@ -9,16 +9,17 @@ int Resistor::maxResistors = 100;
 
 Resistor::Resistor() {}
 
-Resistor::Resistor(string &name_) {
-    name = name_;
+Resistor::Resistor(string &name ) {
+    name = name ;
 }
 
-Resistor::Resistor(string name_, double resistance_, int *endpoints_) {
-    rIndex = Resistor::rIndexCount++;
-    name = name_;
-    resistance = resistance_;
-    endpointNodeIDs[0] = endpoints_[0];
-    endpointNodeIDs[1] = endpoints_[1];
+Resistor::Resistor(string &name , double resistance , int *endpoints ) {
+    Resistor::rIndex = Resistor::rIndexCount;
+    Resistor::rIndexCount++;
+    Resistor::name = name ;
+    Resistor::resistance = resistance ;
+    Resistor::endpointNodeIDs[0] = endpoints [0];
+    Resistor::endpointNodeIDs[1] = endpoints [1];
 }
 
 Resistor::~Resistor() {
@@ -34,8 +35,8 @@ double Resistor::getResistance() const {
     return resistance;
 }
 
-void Resistor::setResistance(double resistance_) {
-    Resistor::resistance = resistance_;
+void Resistor::setResistance(double resistance ) {
+    Resistor::resistance = resistance ;
 }
 
 int Resistor::getRIndex() const {
@@ -56,14 +57,13 @@ const int *Resistor::getEndpointNodeIDs() const {
 
 ostream &operator<<(ostream &os, const Resistor &resistor) {
     int resistance = (int) (resistor.resistance);
-    os << "R" << resistor.getName() << "          ";
+    os << resistor.getName() << "_________________ ";
     //format output
     while (resistance < 10000) {
-        os << " ";
+        os << "_";
         resistance *= 10;
     }
-    os << setprecision(2) << fixed << resistance << " Ohms " << resistor.getEndpointNodeIDs()[0] << " -> "
+    os << setprecision(2) << fixed << resistor.resistance << " Ohms " << resistor.getEndpointNodeIDs()[0] << " -> "
        << resistor.getEndpointNodeIDs()[1] << endl;
     return os;
 }
-

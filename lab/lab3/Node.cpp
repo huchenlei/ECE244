@@ -8,8 +8,9 @@ int Node::maxNodeNumber = 100;
 
 Node::Node() {
     numRes = 0;
-    for (int i = 0; i < MAX_RESISTORS_PER_NODE; i++)
+    for (int i = 0; i < MAX_RESISTORS_PER_NODE; i++) {
         resIDArray[i] = -1;
+    }
 }
 
 Node::~Node() {
@@ -17,7 +18,10 @@ Node::~Node() {
 }
 
 Node::Node(int nodeIndex_) {
-    Node();
+    numRes = 0;
+    for (int i = 0; i < MAX_RESISTORS_PER_NODE; i++) {
+        resIDArray[i] = -1;
+    }
     nodeIndex = nodeIndex_;
 }
 
@@ -26,7 +30,7 @@ bool Node::canAddResistor(int rIndex) {
 }
 
 bool Node::canAddResistor() {
-    if (MAX_RESISTORS_PER_NODE < numRes) {
+    if (numRes >= MAX_RESISTORS_PER_NODE) {
         return false;
     } else {
         return true;
@@ -39,11 +43,13 @@ void Node::addResistor(int rIndex) {
         for (int i = 0; i < MAX_RESISTORS_PER_NODE; ++i) {
             if (resIDArray[i] == -1) {
                 resIDArray[i] = rIndex;
+                break;
             }
         }
         numRes++;
+        empty = false;
     } else {
-        // to be done
+        throw exception();
     }
 }
 
@@ -67,3 +73,13 @@ int *Node::getResIDArray() {
     return resIDArray;
 }
 
+bool Node::isEmpty() const {
+    return empty;
+}
+
+void Node::reset() {
+    for (int i = 0; i < MAX_RESISTORS_PER_NODE; i++) {
+        resIDArray[i] = -1;
+    }
+    numRes = 0;
+}

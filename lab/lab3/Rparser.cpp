@@ -18,7 +18,15 @@ string Rparser::parse(const string &s) {
             check_max_val(maxR);
 
             Node::maxNodeNumber = maxN;
-            Resistor::maxResistors = maxR;
+            nodeArray.reserve(maxN);
+            for (int i = 0; i < nodeArray.size(); i++){
+                if(i < maxN){
+                    nodeArray[i].reset();
+                }else{
+                    nodeArray.erase(nodeArray.begin() + i);
+                }
+            }
+            resistorArray.clear();
             return "New network: max node number is " + to_str(maxN) + "; max resistors is " + to_str(maxR);
 
         } else if (cmd == "insertR") {
@@ -52,22 +60,23 @@ string Rparser::parse(const string &s) {
             check_resistance(resistance);
             check_args(raw_cmd, 2);
 
-            modify_resistor(name, resistance);
-            return "Modified: resistor " + name + " to " + to_str(resistance, 2) + " Ohms";
+            double oldResistance = modify_resistor(name, resistance);
+            return "Modified: resistor " + name + " from " + to_str(oldResistance, 2) + " Ohms to " + to_str(resistance, 2) +
+                   " Ohms";
         } else if (cmd == "printR") {
             check_args_few(raw_cmd, 1);
             if (raw_cmd[1] == "all") {
                 check_args_more(raw_cmd, 1);
                 stringstream ss;
                 ss << "Print:" << endl;
-                for (int i = 0; i < resistorArray.size(); ++i) {
+                for (int i = 0; i < resistorArray.size(); i++) {
                     ss << resistorArray[i];
                 }
                 return ss.str();
             } else {
                 string name = raw_cmd[1];
                 check_args_more(raw_cmd, 1);
-                return resistor_info(name);
+                return "Print:\n" + resistor_info(name);
             }
         } else if (cmd == "printNode") {
             check_args_few(raw_cmd, 1);
@@ -75,7 +84,7 @@ string Rparser::parse(const string &s) {
                 check_args_more(raw_cmd, 1);
                 stringstream ss;
                 ss << "Print:" << endl;
-                for (int i = 0; i < nodeArray.size(); ++i) {
+                for (int i = 0; i < nodeArray.size(); i++) {
                     ss << node_info(nodeArray[i].getNodeIndex());
                 }
                 return ss.str();
@@ -114,22 +123,32 @@ void check_resistance(double resistance) {
 }
 
 void Rparser::insert_resistor(string &name, double resistance, int node1, int node2) {
-    Node node_1 = find_node_by_index(node1);
-    Node node_2 = find_node_by_index(node2);
-    int endpoints[2] = {node1, node2};
+    if (resistorArray.size() >= Resistor::maxResistors) {
+        args_exception ae("Error: resistor array is full");
+        throw ae;
+    }
     try {
         find_resistor_by_name(name);
     } catch (args_exception) {
         // if not found
-        Resistor resistor(name, resistance, endpoints);
-        if (node_1.canAddResistor() && node_2.canAddResistor()) {
-            node_1.addResistor(resistor.getRIndex());
-            node_2.addResistor(resistor.getRIndex());
-            resistorArray.push_back(resistor);
-            nodeArray.push_back(node_1);
-            nodeArray.push_back(node_2);
+        Node *node_1 = find_node_by_index(node1);
+        Node *node_2 = find_node_by_index(node2);
+        if (node_1->canAddResistor() && node_2->canAddResistor()) {
+            int endpoints[2] = {node1, node2};
+            Resistor *resistor = new Resistor(name, resistance, endpoints);
+            node_1->addResistor(resistor->getRIndex());
+            node_2->addResistor(resistor->getRIndex());
+            resistorArray.push_back(*resistor);
+            if (!node_array_contains(node_1->getNodeIndex()))
+                nodeArray.push_back(*node_1);
+            if (!node_array_contains(node_2->getNodeIndex()))
+                nodeArray.push_back(*node_2);
             return; // exit early
         } else {
+            if (node_1->isEmpty())
+                delete node_1;
+            if (node_2->isEmpty())
+                delete node_2;
             args_exception ae("Error: node is full");
             throw ae;
         }
@@ -139,8 +158,11 @@ void Rparser::insert_resistor(string &name, double resistance, int node1, int no
     throw ae;
 }
 
-void Rparser::modify_resistor(string &name, double resistance) {
-    find_resistor_by_name(name).setResistance(resistance);
+double Rparser::modify_resistor(string &name, double resistance) {
+    Resistor *r = find_resistor_by_name(name);
+    double oldResistance = r->getResistance();
+    r->setResistance(resistance);
+    return oldResistance;
 }
 
 void Rparser::delete_resistor(string &name) {
@@ -160,70 +182,72 @@ void Rparser::delete_resistor(string &name) {
 }
 
 void Rparser::delete_attached_resistor(int rIndex, int nodeIndex) {
-    Node node = find_node_by_index(nodeIndex);
-    for (int i = 0; i < node.getNumRes(); ++i) {
-        if (node.getResIDArray()[i] == rIndex) {
-            node.getResIDArray()[i] = -1;// -1 means null
-            node.setNumRes(node.getNumRes() - 1);
+    Node *node = find_node_by_index(nodeIndex);
+    for (int i = 0; i < node->getNumRes(); i++) {
+        if (node->getResIDArray()[i] == rIndex) {
+            node->getResIDArray()[i] = -1;// -1 means null
+            node->setNumRes(node->getNumRes() - 1);
+            if (node->getNumRes() == 0)
+                delete node;
         }
     }
 }
 
 string Rparser::resistor_info(string &name) {
-    Resistor resistor = find_resistor_by_name(name);
+    Resistor *resistor = find_resistor_by_name(name);
     stringstream ss;
-    ss << resistor;
+    ss << *resistor;
     return ss.str();
 }
 
 string Rparser::node_info(int nodeIndex) {
-    Node node = find_node_by_index(nodeIndex);
+    Node *node = find_node_by_index(nodeIndex);
     stringstream ss;
-    ss << "Connections at node " << node.getNodeIndex() << ": " << node.getNumRes() << " resistor(s)" << endl;
+    ss << "Connections at node " << node->getNodeIndex() << ": " << node->getNumRes() << " resistor(s)" << endl;
     for (int i = 0; i < MAX_RESISTORS_PER_NODE; i++) {
         try {
-            ss << find_resistor_by_index(node.getResIDArray()[i]) << endl;
+            ss << *find_resistor_by_index(node->getResIDArray()[i]);
         } catch (args_exception) {
-            if (node.getResIDArray()[i] != -1)
+            if (node->getResIDArray()[i] != -1)
                 cout << "Something unexpected happened!";
         }
     }
     return ss.str();
 }
 
-Resistor Rparser::find_resistor_by_index(int rIndex) {
-    for (int i = 0; i < resistorArray.size(); ++i)
+Resistor *Rparser::find_resistor_by_index(int rIndex) {
+    for (int i = 0; i < resistorArray.size(); i++)
         if (resistorArray[i].getRIndex() == rIndex)
-            return resistorArray[i];
+            return &resistorArray[i];
     args_exception ae("Error: Resistor #" + to_str(rIndex) + " not found");
     throw ae;
 }
 
 bool Rparser::resistor_array_contains(string &name) {
-    for (int i = 0; i < resistorArray.size(); ++i)
+    for (int i = 0; i < resistorArray.size(); i++)
         if (resistorArray[i].getName() == name)
             return true;
     return false;
 }
 
 bool Rparser::node_array_contains(int nodeIndex) {
-    for (int i = 0; i < nodeArray.size(); ++i)
+    for (int i = 0; i < nodeArray.size(); i++)
         if (nodeArray[i].getNodeIndex() == nodeIndex)
             return true;
     return false;
 }
 
-Node Rparser::find_node_by_index(int nodeIndex) {
-    for (int i = 0; i < nodeArray.size(); ++i)
+Node *Rparser::find_node_by_index(int nodeIndex) {
+    for (int i = 0; i < nodeArray.size(); i++)
         if (nodeArray[i].getNodeIndex() == nodeIndex)
-            return nodeArray[i];
-    return Node(nodeIndex);
+            return &nodeArray[i];
+    return new Node(nodeIndex);
 }
 
-Resistor Rparser::find_resistor_by_name(string &name) {
-    for (int i = 0; i < resistorArray.size(); ++i) {
+Resistor *Rparser::find_resistor_by_name(string &name) {
+    for (int i = 0; i < resistorArray.size(); i++) {
         if (resistorArray[i].getName() == name) {
-            return resistorArray[i];
+            return &resistorArray[i];
         }
     }
     args_exception ae("Error: Resistor " + name + " not found");
@@ -235,7 +259,7 @@ Rparser::Rparser() {}
 void check_node(int node) {
     if (node > Node::maxNodeNumber || node < MIN_NODE_NUMBER) {
         args_exception ae(
-                "Error: " + to_str(node) + " is out of permitted range " + to_str(MIN_NODE_NUMBER) + "-" +
+                "Error: node " + to_str(node) + " is out of permitted range " + to_str(MIN_NODE_NUMBER) + "-" +
                 to_str(Node::maxNodeNumber));
         throw ae;
     }
@@ -276,7 +300,7 @@ void check_args_more(vector<string> raw_cmd, int n) {
 }
 
 void check_max_val(int maxVal) {
-    if (maxVal <= 0){
+    if (maxVal <= 0) {
         args_exception ae("Error: maxVal arguments must be greater than 0");
         throw ae;
     }
