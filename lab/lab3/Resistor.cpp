@@ -57,10 +57,11 @@ const int *Resistor::getEndpointNodeIDs() const {
 
 ostream &operator<<(ostream &os, const Resistor &resistor) {
     int resistance = (int) (resistor.resistance);
-    os << resistor.getName() << "_________________ ";
+    //    os << resistor.getName() << "_________________ ";
+    os << resistor.getName() << "                  ";
     //format output
     while (resistance < 10000) {
-        os << "_";
+        os << " ";
         resistance *= 10;
     }
     os << setprecision(2) << fixed << resistor.resistance << " Ohms " << resistor.getEndpointNodeIDs()[0] << " -> "
