@@ -1,0 +1,69 @@
+//
+// Created by CharlieHu on 2016-10-08.
+//
+
+#include "Resistor.h"
+
+int Resistor::rIndexCount = 0;
+int Resistor::maxResistors = 100;
+
+Resistor::Resistor() {}
+
+Resistor::Resistor(string &name_) {
+    name = name_;
+}
+
+Resistor::Resistor(string name_, double resistance_, int *endpoints_) {
+    rIndex = Resistor::rIndexCount++;
+    name = name_;
+    resistance = resistance_;
+    endpointNodeIDs[0] = endpoints_[0];
+    endpointNodeIDs[1] = endpoints_[1];
+}
+
+Resistor::~Resistor() {
+
+}
+
+//getters and setters
+string Resistor::getName() const {
+    return name;
+}
+
+double Resistor::getResistance() const {
+    return resistance;
+}
+
+void Resistor::setResistance(double resistance_) {
+    Resistor::resistance = resistance_;
+}
+
+int Resistor::getRIndex() const {
+    return rIndex;
+}
+
+void Resistor::setRIndex(int rIndex) {
+    Resistor::rIndex = rIndex;
+}
+
+void Resistor::setName(const string &name) {
+    Resistor::name = name;
+}
+
+const int *Resistor::getEndpointNodeIDs() const {
+    return endpointNodeIDs;
+}
+
+ostream &operator<<(ostream &os, const Resistor &resistor) {
+    int resistance = (int) (resistor.resistance);
+    os << "R" << resistor.getName() << "          ";
+    //format output
+    while (resistance < 10000) {
+        os << " ";
+        resistance *= 10;
+    }
+    os << setprecision(2) << fixed << resistance << " Ohms " << resistor.getEndpointNodeIDs()[0] << " -> "
+       << resistor.getEndpointNodeIDs()[1] << endl;
+    return os;
+}
+
