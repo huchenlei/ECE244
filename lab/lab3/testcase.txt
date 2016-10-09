@@ -89,5 +89,4 @@ bigres 1000.00 Ohms 2 -> 3
 > deleteR all
 Deleted: all resistors
 > printR all
-Print:
 >

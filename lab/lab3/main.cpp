@@ -35,6 +35,9 @@ int main() {
 //        cout << "------------------" << endl;
 //        while(true) {
 //            getline(f, raw_str);
+//            if (raw_str.length() == 1){
+//                return 0;
+//            }
 //            if (raw_str[0] == '>') {
 //                str = raw_str.substr(2);
 //                break;
@@ -47,4 +50,3 @@ int main() {
 //    }
 //    return 0;
 //}
-//
