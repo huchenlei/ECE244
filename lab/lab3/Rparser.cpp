@@ -1,8 +1,20 @@
 //
 // Created by CharlieHu on 2016-10-08.
 //
-
+    
 #include "Rparser.h"
+
+Rparser::Rparser() {}
+
+Rparser::~Rparser() {
+  //    cout << "Rparser des called!" << endl;
+    for (vector<Resistor *>::iterator it = resistorArray.begin(); it != resistorArray.end(); it++) {
+        delete *it;
+    }
+    for (vector<Node *>::iterator it = nodeArray.begin(); it != nodeArray.end(); it++) {
+        delete *it;
+    }
+}
 
 string Rparser::parse(const string &s) {
     vector<string> raw_cmd = split(s, ' ');
@@ -18,15 +30,23 @@ string Rparser::parse(const string &s) {
             check_max_val(maxR);
 
             Node::maxNodeNumber = maxN;
-            nodeArray.reserve(maxN);
-            for (int i = 0; i < nodeArray.size(); i++){
-                if(i < maxN){
-                    nodeArray[i].reset();
-                }else{
-                    nodeArray.erase(nodeArray.begin() + i);
+            Resistor::maxResistors = maxR;
+
+            if (maxN < nodeArray.size())
+                for (int j = maxN; j < nodeArray.size(); ++j) {
+                    delete nodeArray[j];
+                    nodeArray.erase(nodeArray.begin() + j);
                 }
+            for (int i = 0; i < (maxN < nodeArray.size() ? (unsigned long) maxN : nodeArray.size()); ++i) {
+                nodeArray[i]->reset();
             }
+            for (vector<Resistor *>::iterator it = resistorArray.begin(); it != resistorArray.end(); it++)
+                delete *it;
             resistorArray.clear();
+
+            nodeArray.reserve((unsigned long) maxN);
+            resistorArray.reserve((unsigned long) maxR);
+
             return "New network: max node number is " + to_str(maxN) + "; max resistors is " + to_str(maxR);
 
         } else if (cmd == "insertR") {
@@ -61,16 +81,17 @@ string Rparser::parse(const string &s) {
             check_args(raw_cmd, 2);
 
             double oldResistance = modify_resistor(name, resistance);
-            return "Modified: resistor " + name + " from " + to_str(oldResistance, 2) + " Ohms to " + to_str(resistance, 2) +
+            return "Modified: resistor " + name + " from " + to_str(oldResistance, 2) + " Ohms to " +
+                   to_str(resistance, 2) +
                    " Ohms";
         } else if (cmd == "printR") {
             check_args_few(raw_cmd, 1);
             if (raw_cmd[1] == "all") {
                 check_args_more(raw_cmd, 1);
                 stringstream ss;
-                ss << "Print:" << endl;
+                ss << "Print:";
                 for (int i = 0; i < resistorArray.size(); i++) {
-                    ss << resistorArray[i];
+                    ss << endl << *resistorArray[i];
                 }
                 return ss.str();
             } else {
@@ -83,16 +104,16 @@ string Rparser::parse(const string &s) {
             if (raw_cmd[1] == "all") {
                 check_args_more(raw_cmd, 1);
                 stringstream ss;
-                ss << "Print:" << endl;
+                ss << "Print:";
                 for (int i = 0; i < nodeArray.size(); i++) {
-                    ss << node_info(nodeArray[i].getNodeIndex());
+                    ss << node_info(nodeArray[i]->getNodeIndex());
                 }
                 return ss.str();
             } else {
                 int nodeid = stoint(raw_cmd[1]);
                 check_node(nodeid);
                 check_args(raw_cmd, 1);
-                return "Print:\n" + node_info(nodeid);
+                return "Print:" + node_info(nodeid);
             }
         } else if (cmd == "deleteR") {
             check_args_few(raw_cmd, 1);
@@ -129,7 +150,7 @@ void Rparser::insert_resistor(string &name, double resistance, int node1, int no
     }
     try {
         find_resistor_by_name(name);
-    } catch (args_exception) {
+    } catch (args_exception &e) {
         // if not found
         Node *node_1 = find_node_by_index(node1);
         Node *node_2 = find_node_by_index(node2);
@@ -138,11 +159,11 @@ void Rparser::insert_resistor(string &name, double resistance, int node1, int no
             Resistor *resistor = new Resistor(name, resistance, endpoints);
             node_1->addResistor(resistor->getRIndex());
             node_2->addResistor(resistor->getRIndex());
-            resistorArray.push_back(*resistor);
+            resistorArray.push_back(resistor);
             if (!node_array_contains(node_1->getNodeIndex()))
-                nodeArray.push_back(*node_1);
+                nodeArray.push_back(node_1);
             if (!node_array_contains(node_2->getNodeIndex()))
-                nodeArray.push_back(*node_2);
+                nodeArray.push_back(node_2);
             return; // exit early
         } else {
             if (node_1->isEmpty())
@@ -167,18 +188,18 @@ double Rparser::modify_resistor(string &name, double resistance) {
 
 void Rparser::delete_resistor(string &name) {
     const int *endpoints;
-    int rIndex;
     // delete Resistor in resistorArray
     for (int i = 0; i < resistorArray.size(); i++) {
-        if (resistorArray[i].getName() == name) {
-            endpoints = resistorArray[i].getEndpointNodeIDs();
-            rIndex = resistorArray[i].getRIndex();
+        if (resistorArray[i]->getName() == name) {
+            endpoints = resistorArray[i]->getEndpointNodeIDs();
+            const int rIndex = resistorArray[i]->getRIndex();
             resistorArray.erase(resistorArray.begin() + i);
+            delete_attached_resistor(rIndex, endpoints[0]);
+            delete_attached_resistor(rIndex, endpoints[1]);
             break;
         }
     }
-    delete_attached_resistor(rIndex, endpoints[0]);
-    delete_attached_resistor(rIndex, endpoints[1]);
+
 }
 
 void Rparser::delete_attached_resistor(int rIndex, int nodeIndex) {
@@ -203,10 +224,11 @@ string Rparser::resistor_info(string &name) {
 string Rparser::node_info(int nodeIndex) {
     Node *node = find_node_by_index(nodeIndex);
     stringstream ss;
-    ss << "Connections at node " << node->getNodeIndex() << ": " << node->getNumRes() << " resistor(s)" << endl;
+    ss << "\nConnections at node " << node->getNodeIndex() << ": " << node->getNumRes() << " resistor(s)";
     for (int i = 0; i < MAX_RESISTORS_PER_NODE; i++) {
         try {
-            ss << *find_resistor_by_index(node->getResIDArray()[i]);
+            Resistor r = *find_resistor_by_index(node->getResIDArray()[i]);
+            ss << "\n" << r;
         } catch (args_exception) {
             if (node->getResIDArray()[i] != -1)
                 cout << "Something unexpected happened!";
@@ -217,44 +239,35 @@ string Rparser::node_info(int nodeIndex) {
 
 Resistor *Rparser::find_resistor_by_index(int rIndex) {
     for (int i = 0; i < resistorArray.size(); i++)
-        if (resistorArray[i].getRIndex() == rIndex)
-            return &resistorArray[i];
+        if (resistorArray[i]->getRIndex() == rIndex)
+            return resistorArray[i];
     args_exception ae("Error: Resistor #" + to_str(rIndex) + " not found");
     throw ae;
 }
 
-bool Rparser::resistor_array_contains(string &name) {
-    for (int i = 0; i < resistorArray.size(); i++)
-        if (resistorArray[i].getName() == name)
-            return true;
-    return false;
-}
-
 bool Rparser::node_array_contains(int nodeIndex) {
     for (int i = 0; i < nodeArray.size(); i++)
-        if (nodeArray[i].getNodeIndex() == nodeIndex)
+        if (nodeArray[i]->getNodeIndex() == nodeIndex)
             return true;
     return false;
 }
 
 Node *Rparser::find_node_by_index(int nodeIndex) {
     for (int i = 0; i < nodeArray.size(); i++)
-        if (nodeArray[i].getNodeIndex() == nodeIndex)
-            return &nodeArray[i];
+        if (nodeArray[i]->getNodeIndex() == nodeIndex)
+            return nodeArray[i];
     return new Node(nodeIndex);
 }
 
 Resistor *Rparser::find_resistor_by_name(string &name) {
     for (int i = 0; i < resistorArray.size(); i++) {
-        if (resistorArray[i].getName() == name) {
-            return &resistorArray[i];
+        if (resistorArray[i]->getName() == name) {
+            return resistorArray[i];
         }
     }
     args_exception ae("Error: Resistor " + name + " not found");
     throw ae;
 }
-
-Rparser::Rparser() {}
 
 void check_node(int node) {
     if (node > Node::maxNodeNumber || node < MIN_NODE_NUMBER) {
@@ -338,7 +351,7 @@ int ctoint(char c) {
     return c - 48;
 }
 
-int stoint(string &s) {
+int stoint(const string &s) {
     string int_val = "1234567890";
     int result = 0;
     for (int i = 0; i < s.length(); i++) {
@@ -353,7 +366,7 @@ int stoint(string &s) {
     return result;
 }
 
-double stodouble(string &s) {
+double stodouble(const string &s) {
     string double_val = "1234567890";
     double result = 0;
     double deci = 10;

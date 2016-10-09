@@ -1,20 +1,20 @@
 #include <iostream>
 #include "Rparser.h"
-
-int main() {
-    string str;
-
-    cout << "> ";
-    getline(cin, str);
-
-    Rparser rp;
-    while (!cin.eof()) {
-        cout << rp.parse(str) << endl;
-        cout << "> ";
-        getline(cin, str);
-    }
-    return 0;
-}
+//
+//int main() {
+//    string str;
+//
+//    cout << "> ";
+//    getline(cin, str);
+//
+//    Rparser rp;
+//    while (!cin.eof()) {
+//        cout << rp.parse(str) << endl;
+//        cout << "> ";
+//        getline(cin, str);
+//    }
+//    return 0;
+//}
 
 //#include <fstream>
 //
@@ -50,3 +50,26 @@ int main() {
 //    }
 //    return 0;
 //}
+
+#include <fstream>
+
+int main() {
+    string str;
+    fstream f;
+    f.open("testcase2.txt");
+
+    cout << "Exec: \n";
+    getline(f, str);
+
+    Rparser *rp = new Rparser();
+    while (str != "end") {
+        cout << str << endl;
+        cout << rp->parse(str) << endl;
+        cout << "------------------" << endl;
+        cout << "\n\n";
+        cout << "Exec: \n";
+        getline(f, str);
+    }
+    delete rp;
+    return 0;
+}

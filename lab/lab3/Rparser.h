@@ -19,11 +19,13 @@ using namespace std;
 
 class Rparser {
 private:
-    vector<Resistor> resistorArray;
-    vector<Node> nodeArray;
+    vector<Resistor*> resistorArray;
+    vector<Node*> nodeArray;
 
 public:
     Rparser();
+
+    ~Rparser();
 
     string parse(const string &s);
 
@@ -34,8 +36,6 @@ public:
     void delete_resistor(string &name);
 
     void delete_attached_resistor(int rIndex, int nodeIndex);
-
-    bool resistor_array_contains(string &name);
 
     bool node_array_contains(int nodeIndex);
 
@@ -91,9 +91,8 @@ string to_str(double d);
 //with decimal places specified
 string to_str(double d, int n);
 
-int stoint(string &s);
+int stoint(const string &s);
 
-double stodouble(string &s);
-
+double stodouble(const string &s);
 
 #endif //LAB3_1_RPARSER_H

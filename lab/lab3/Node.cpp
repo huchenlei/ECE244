@@ -14,7 +14,7 @@ Node::Node() {
 }
 
 Node::~Node() {
-
+  //    cout << "Node des called!" << endl;
 }
 
 Node::Node(int nodeIndex_) {
