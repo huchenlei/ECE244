@@ -47,7 +47,6 @@ void Node::addResistor(int rIndex) {
             }
         }
         numRes++;
-        isEmpty = false;
     } else {
         throw exception();
     }
@@ -73,8 +72,12 @@ int *Node::getResIDArray() {
     return resIDArray;
 }
 
-bool Node::isEmpty() const {
-    return isEmpty;
+bool Node::isEmpty() {
+    if(numRes == 0){
+        return true;
+    }else{
+        return false;
+    }
 }
 
 void Node::reset() {

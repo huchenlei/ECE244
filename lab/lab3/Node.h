@@ -24,7 +24,6 @@ private:
     int nodeIndex;
     int numRes; // number of resistors currently connected
     int resIDArray[MAX_RESISTORS_PER_NODE]; // stores the index of each resistor connected
-    bool isEmpty = true;
 
 public:
 
@@ -60,7 +59,7 @@ public:
 
     int *getResIDArray();
 
-    bool isEmpty() const;
+    bool isEmpty();
 
     void reset();
 
