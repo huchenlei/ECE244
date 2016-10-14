@@ -1,0 +1,17 @@
+Submitting assignment 3 from remote.ecf.utoronto.ca
+Checking for the expected files in the current directory
+Main.cpp Rparser.cpp Rparser.h Resistor.h Resistor.cpp Node.h Node.cpp
+can't find file 'Main.cpp'.
+can't find file 'Rparser.cpp'.
+can't find file 'Rparser.h'.
+can't find file 'Resistor.h'.
+can't find file 'Resistor.cpp'.
+can't find file 'Node.h'.
+can't find file 'Node.cpp'.
+
+Error: cannot find all expected files in the current directory.
+Please make sure all necessary files are in the current directory. Also, 
+check that the file names are correct, including capitalization.
+
+No files were submitted
+

@@ -1,0 +1,18 @@
+Submitting assignment 3 from remote.ecf.utoronto.ca
+Checking for the expected files in the current directory
+Main.cpp Rparser.cpp Rparser.h Resistor.h Resistor.cpp Node.h Node.cpp
+Attempting to build your code.  Make output follows:
+==================================================================
+g++ -c Main.cpp
+g++ -c Rparser.cpp
+g++ -c Resistor.cpp
+------------------------------------------------------------------
+The build appears to have failed.  See the make output for
+more information about the details of the error.
+------------------------------------------------------------------
+This assignment did not compile.
+It will not receive any functionality marks but will still be marked for style.
+Do want to submit anyways? (y/n): n
+
+No files were submitted
+

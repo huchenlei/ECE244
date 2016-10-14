@@ -23,7 +23,6 @@ Resistor::Resistor(string &name , double resistance , int *endpoints ) {
 }
 
 Resistor::~Resistor() {
-  //    cout << "Resistor des called!" << endl;
 }
 
 //getters and setters

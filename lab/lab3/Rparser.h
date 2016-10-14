@@ -49,7 +49,7 @@ public:
 
     string node_info(int nodeIndex);
 
-
+    void reset();
 };
 
 //user input checking functions
