@@ -13,31 +13,33 @@ private:
     double resistance; // resistance (in Ohms)
     string name; // C++ string holding the label
     int endpointNodeIDs[2]; // IDs of nodes it attaches to
+    Resistor *next;
+    Resistor *previous;
 
 public:
     static int rIndexCount;
-    static int maxResistors;
 
     Resistor();
 
-    Resistor(string &name_);
-
-    Resistor(string &name_, double resistance_, int endpoints_[2]);
-
-    Resistor(int rIndex_, string name_, double resistance_, int endpoints_[2]);
-
-    Resistor(int rIndex, double resistance, const string &name, int *endpointNodeIDs);
-    // rIndex_ is the index of this resistor in the resistor array
-    // endpoints_ holds the node indices to which this resistor connects
+    Resistor(double resistance, const string &name, int *endpointNodeIDs);
+    //copy constructor
+    Resistor(const Resistor &other);
 
     ~Resistor();
 
+    Resistor* deepCopy();
+
     string getName() const; // returns the name
+
     double getResistance() const; // returns the resistance
 
     void setResistance(double resistance_);
 
     int getRIndex() const;
+
+    Resistor *getNext() const;
+
+    void setNext(Resistor *next);
 
     void setRIndex(int rIndex);
 
@@ -45,8 +47,9 @@ public:
 
     const int *getEndpointNodeIDs() const;
 
-    // you *may* create either of the below to print your resistor
-    void print();
+    Resistor *getPrevious() const;
+
+    void setPrevious(Resistor *previous);
 
     friend ostream &operator<<(ostream &, const Resistor &);
 };

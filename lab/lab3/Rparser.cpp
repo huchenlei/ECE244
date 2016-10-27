@@ -35,12 +35,13 @@ string Rparser::parse(const string &s) {
                     nodeArray.erase(nodeArray.begin() + maxNumOfNodes);
                 }
             } else { // if expanding the node array
-                for (int i = nodeArray.size(); i < maxNumOfNodes; ++i) {
+                for (int i = (int) nodeArray.size(); i < maxNumOfNodes; ++i) {
                     nodeArray.push_back(find_node_by_index(i));
                 }
             }
             // reset the node array
-            for (int i = 0; i < (maxNumOfNodes < nodeArray.size() ? (unsigned long) maxNumOfNodes : nodeArray.size()); ++i) {
+            for (int i = 0;
+                 i < (maxNumOfNodes < nodeArray.size() ? (unsigned long) maxNumOfNodes : nodeArray.size()); ++i) {
                 nodeArray[i]->reset();
             }
             // reset the resistor array
@@ -50,7 +51,6 @@ string Rparser::parse(const string &s) {
 
             nodeArray.reserve((unsigned long) maxNumOfNodes);
             resistorArray.reserve((unsigned long) maxR);
-
 
             return "New network: max node number is " + to_str(maxN) + "; max resistors is " + to_str(maxR);
 
@@ -175,16 +175,13 @@ void Rparser::insert_resistor(string &name, double resistance, int node1, int no
             node_1->addResistor(resistor->getRIndex());
             node_2->addResistor(resistor->getRIndex());
             resistorArray.push_back(resistor);
-            if (!node_array_contains(node_1->getNodeIndex()))
-                nodeArray.push_back(node_1);
-            if (!node_array_contains(node_2->getNodeIndex()))
-                nodeArray.push_back(node_2);
+//            if lazy-mode
+//            if (!node_array_contains(node_1->getNodeIndex()))
+//                nodeArray.push_back(node_1);
+//            if (!node_array_contains(node_2->getNodeIndex()))
+//                nodeArray.push_back(node_2);
             return; // exit early
         } else {
-//            if (node_1->isEmpty())
-//                delete node_1;
-//            if (node_2->isEmpty())
-//                delete node_2;
             args_exception ae("Error: node is full");
             throw ae;
         }
@@ -223,7 +220,7 @@ void Rparser::delete_attached_resistor(int rIndex, int nodeIndex) {
     Node *node = find_node_by_index(nodeIndex);
     for (int i = 0; i < node->getNumRes(); i++) {
         if (node->getResIDArray()[i] == rIndex) {
-            node->getResIDArray()[i] = -1;// -1 means null
+            node->getResIDArray()[i] = -1;// -1 means null here
             node->setNumRes(node->getNumRes() - 1);
             if (node->getNumRes() == 0)
                 delete node;
@@ -260,13 +257,6 @@ Resistor *Rparser::find_resistor_by_index(int rIndex) {
             return resistorArray[i];
     args_exception ae("Error: resistor " + to_str(rIndex) + " not found");
     throw ae;
-}
-
-bool Rparser::node_array_contains(int nodeIndex) {
-    for (int i = 0; i < nodeArray.size(); i++)
-        if (nodeArray[i]->getNodeIndex() == nodeIndex)
-            return true;
-    return false;
 }
 
 Node *Rparser::find_node_by_index(int nodeIndex) {
@@ -316,14 +306,14 @@ void check_args(vector<string> raw_cmd, int n) {
 }
 
 void check_args_few(vector<string> raw_cmd, int n) {
-    if ((int)(raw_cmd.size()) < n + 1) {
+    if ((int) (raw_cmd.size()) < n + 1) {
         args_exception ae("Error: too few arguments");
         throw ae;
     }
 }
 
 void check_args_more(vector<string> raw_cmd, int n) {
-    if ((int)(raw_cmd.size()) > n + 1) {
+    if ((int) (raw_cmd.size()) > n + 1) {
         args_exception ae("Error: too many arguments");
         throw ae;
     }
@@ -371,7 +361,7 @@ int ctoint(char c) {
 int stoint(const string &s) {
     string int_val = "1234567890";
     int result = 0;
-    for (int i = 0; i < (int)(s.length()); i++) {
+    for (int i = 0; i < (int) (s.length()); i++) {
         if (int_val.find(s[i]) == string::npos) {
             args_exception ae("Error: invalid argument");
             throw ae;
@@ -389,7 +379,7 @@ double stodouble(const string &s) {
     double deci = 10;
     bool is_deci = false;
     args_exception ae("Error: invalid argument");
-    for (int i = 0; i < (int)(s.length()); i++) {
+    for (int i = 0; i < (int) (s.length()); i++) {
         if (s[i] == '.') {
             // there should be at most one '.'
             if (is_deci) {

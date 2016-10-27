@@ -10,8 +10,8 @@
 #include <vector>
 #include <iomanip>
 
-#include "Node.h"
-#include "Resistor.h"
+#include "NodeList.h"
+#include "ResistorList.h"
 
 #define MIN_NODE_NUMBER 0
 
@@ -19,8 +19,8 @@ using namespace std;
 
 class Rparser {
 private:
-    vector<Resistor*> resistorArray;
-    vector<Node*> nodeArray;
+    NodeList *nodeList;
+    ResistorList *resistorList;
 
 public:
     Rparser();
@@ -29,31 +29,26 @@ public:
 
     string parse(const string &s);
 
-    void insert_resistor(string &name, double resistance, int node1, int node2);
+    string insertR(vector<string> &raw_cmd);
 
-    double modify_resistor(string &name, double resistance);
+    string modifyR(vector<string> &raw_cmd);
 
-    void delete_resistor(string &name);
+    string printNode(vector<string> &raw_cmd);
 
-    void delete_attached_resistor(int rIndex, int nodeIndex);
+    string printR(vector<string> &raw_cmd);
 
-    Node* find_node_by_index(int nodeIndex);
+    string deleteR(vector<string> &raw_cmd);
 
-    Resistor* find_resistor_by_name (string &name);
+    string setV(vector<string> &raw_cmd);
 
-    Resistor* find_resistor_by_index(int rIndex);
+    string unsetV(vector<string> &raw_cmd);
 
-    string resistor_info(string &name);
+    string solve(vector<string> &raw_cmd);
 
-    string node_info(int nodeIndex);
-
-    void reset();
 };
 
 //user input checking functions
 void check_resistance(double resistance);
-
-void check_node(int node);
 
 void check_name(string name);
 
@@ -64,8 +59,6 @@ void check_args(vector<string> raw_cmd, int n);
 void check_args_few(vector<string> raw_cmd, int n);
 
 void check_args_more(vector<string> raw_cmd, int n);
-
-void check_max_val(int maxVal);
 
 //exception handling class
 class args_exception : exception {
@@ -84,13 +77,7 @@ vector<string> split(const string &s, char sep);
 
 string to_str(int n);
 
-string to_str(double d);
-
 //with decimal places specified
 string to_str(double d, int n);
-
-int stoint(const string &s);
-
-double stodouble(const string &s);
 
 #endif //LAB3_1_RPARSER_H

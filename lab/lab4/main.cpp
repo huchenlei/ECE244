@@ -1,5 +1,9 @@
 #include <iostream>
+#include <string>
 #include "Rparser.h"
+#include "debug.h"
+
+bool debug = false;
 //
 //int main() {
 //    string str;
@@ -26,7 +30,7 @@ int main() {
 
     cout << "Exec: \n";
     getline(f, raw_str);
-    str = raw_str.substr(2);
+    str = raw_str.substr(raw_str.find("> ") + 2);
 
     Rparser rp;
     while (!f.eof()) {
@@ -35,9 +39,9 @@ int main() {
         string std_output;
         cout << output << endl;
         cout << "------------------" << endl;
-        while(true) {
+        while (true) {
             getline(f, raw_str);
-            if (raw_str.length() == 1){
+            if (raw_str.length() == 1) {
                 return 0;
             }
             if (raw_str[0] == '>') {
@@ -45,12 +49,12 @@ int main() {
                 break;
             } else {
                 cout << raw_str << endl;
-                std_output+=raw_str;
+                std_output += raw_str;
             }
         }
-        if(std_output == output){
+        if (std_output == output) {
             cout << "PASS!" << endl;
-        }else{
+        } else {
             cout << "FAIL!" << endl;
         }
         cout << "\n\n";
@@ -59,26 +63,5 @@ int main() {
 
     return 0;
 }
-//
-//#include <fstream>
-//
-//int main() {
-//    string str;
-//    fstream f;
-//    f.open("testcase2.txt");
-//
-//    cout << "Exec: \n";
-//    getline(f, str);
-//
-//    Rparser *rp = new Rparser();
-//    while (str != "end") {
-//        cout << str << endl;
-//        cout << rp->parse(str) << endl;
-//        cout << "------------------" << endl;
-//        cout << "\n\n";
-//        cout << "Exec: \n";
-//        getline(f, str);
-//    }
-//    delete rp;
-//    return 0;
-//}
+
+
