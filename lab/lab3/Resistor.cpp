@@ -9,22 +9,20 @@ int Resistor::maxResistors = 100;
 
 Resistor::Resistor() {}
 
-Resistor::Resistor(string &name ) {
-    name = name ;
+Resistor::Resistor(string &name) {
+    name = name;
 }
 
-Resistor::Resistor(string &name , double resistance , int *endpoints ) {
+Resistor::Resistor(string &name, double resistance, int *endpoints) {
     Resistor::rIndex = Resistor::rIndexCount;
     Resistor::rIndexCount++;
-    Resistor::name = name ;
-    Resistor::resistance = resistance ;
-    Resistor::endpointNodeIDs[0] = endpoints [0];
-    Resistor::endpointNodeIDs[1] = endpoints [1];
+    Resistor::name = name;
+    Resistor::resistance = resistance;
+    Resistor::endpointNodeIDs[0] = endpoints[0];
+    Resistor::endpointNodeIDs[1] = endpoints[1];
 }
 
-Resistor::~Resistor() {
-//    cout << "Resistor des called!" << endl;
-}
+Resistor::~Resistor() {}
 
 //getters and setters
 string Resistor::getName() const {
@@ -35,8 +33,8 @@ double Resistor::getResistance() const {
     return resistance;
 }
 
-void Resistor::setResistance(double resistance ) {
-    Resistor::resistance = resistance ;
+void Resistor::setResistance(double resistance) {
+    Resistor::resistance = resistance;
 }
 
 int Resistor::getRIndex() const {

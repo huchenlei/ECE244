@@ -3,7 +3,7 @@ DEBUG = -g
 CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 
-parser : parser.cpp
+parser: parser.cpp
 	$(CC) -o parser
 
 clean:
