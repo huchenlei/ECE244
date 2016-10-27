@@ -316,14 +316,14 @@ void check_args(vector<string> raw_cmd, int n) {
 }
 
 void check_args_few(vector<string> raw_cmd, int n) {
-    if (raw_cmd.size() < n + 1) {
+    if ((int)(raw_cmd.size()) < n + 1) {
         args_exception ae("Error: too few arguments");
         throw ae;
     }
 }
 
 void check_args_more(vector<string> raw_cmd, int n) {
-    if (raw_cmd.size() > n + 1) {
+    if ((int)(raw_cmd.size()) > n + 1) {
         args_exception ae("Error: too many arguments");
         throw ae;
     }
@@ -371,7 +371,7 @@ int ctoint(char c) {
 int stoint(const string &s) {
     string int_val = "1234567890";
     int result = 0;
-    for (int i = 0; i < s.length(); i++) {
+    for (int i = 0; i < (int)(s.length()); i++) {
         if (int_val.find(s[i]) == string::npos) {
             args_exception ae("Error: invalid argument");
             throw ae;
@@ -389,7 +389,7 @@ double stodouble(const string &s) {
     double deci = 10;
     bool is_deci = false;
     args_exception ae("Error: invalid argument");
-    for (int i = 0; i < s.length(); i++) {
+    for (int i = 0; i < (int)(s.length()); i++) {
         if (s[i] == '.') {
             // there should be at most one '.'
             if (is_deci) {

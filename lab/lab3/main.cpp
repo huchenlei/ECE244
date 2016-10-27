@@ -31,7 +31,9 @@ int main() {
     Rparser rp;
     while (!f.eof()) {
         cout << str << endl;
-        cout << rp.parse(str) << endl;
+        string output = rp.parse(str);
+        string std_output;
+        cout << output << endl;
         cout << "------------------" << endl;
         while(true) {
             getline(f, raw_str);
@@ -43,14 +45,21 @@ int main() {
                 break;
             } else {
                 cout << raw_str << endl;
+                std_output+=raw_str;
             }
+        }
+        if(std_output == output){
+            cout << "PASS!" << endl;
+        }else{
+            cout << "FAIL!" << endl;
         }
         cout << "\n\n";
         cout << "Exec: \n";
     }
+    
     return 0;
 }
-
+//
 //#include <fstream>
 //
 //int main() {
