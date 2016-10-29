@@ -3,7 +3,6 @@
 //
 
 #include "Rparser.h"
-#include "debug.h"
 
 Rparser::Rparser() {
     nodeList = new NodeList();
@@ -144,17 +143,17 @@ string Rparser::setV(vector<string> &raw_cmd) {
     check_args(raw_cmd, 2);
     int nodeIndex = stoi(raw_cmd[1]);
     double voltage = stod(raw_cmd[2]);
-    Node *node = nodeList->findNodeByIndex(nodeIndex);
+    Node *node = nodeList->findOrInsertNode(nodeIndex);
     node->setVoltage(voltage);
     node->setSource(true);
-    return "Set: node " + to_string(nodeIndex) + " to " + to_str(voltage, 2) + " Volts";
+    return "Set: node " + raw_cmd[1] + " to " + to_str(voltage, 2) + " Volts";
 }
 
 string Rparser::unsetV(vector<string> &raw_cmd) {
     check_args(raw_cmd, 1);
     int nodeIndex = stoi(raw_cmd[1]);
     nodeList->findOrInsertNode(nodeIndex)->setSource(false);
-    return "Unset: the solver will determine the voltage of node " + to_string(nodeIndex);
+    return "Unset: the solver will determine the voltage of node " + raw_cmd[1];
 }
 
 string Rparser::solve(vector<string> &raw_cmd) {
