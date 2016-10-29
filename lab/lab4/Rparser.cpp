@@ -53,7 +53,8 @@ string Rparser::insertR(vector<string> &raw_cmd) {
     check_args_few(raw_cmd, 4);
 
     string name = raw_cmd[1];
-    check_name(name);
+// resistor name can now be "all"
+//    check_name(name);
 
     double resistance = stod(raw_cmd[2]);
     check_resistance(resistance);
@@ -171,6 +172,7 @@ void check_resistance(double resistance) {
     }
 }
 
+// @deprecated
 void check_name(string name) {
     if (name == "all") {
         args_exception ae("Error: resistor name cannot be the keyword \"all\"");

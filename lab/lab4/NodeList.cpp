@@ -69,14 +69,25 @@ Node *NodeList::findOrInsertNode(const int index) {
 }
 
 void NodeList::deleteR(const Resistor &r) {
-    Node *node1 = findNodeByIndex(r.getEndpointNodeIDs()[0]);
-    Node *node2 = findNodeByIndex(r.getEndpointNodeIDs()[1]);
-    node1->deleteRByName(r.getName());
-    node2->deleteRByName(r.getName());
-    if (node1->getResistorList()->getHead() == NULL)
-        delete node1;
-    if (node2->getResistorList()->getHead() == NULL)
-        delete node2;
+    Node *nodes[2];
+    nodes[0] = findNodeByIndex(r.getEndpointNodeIDs()[0]);
+    nodes[1] = findNodeByIndex(r.getEndpointNodeIDs()[1]);
+    for (int i = 0; i < 2; ++i) {
+        nodes[i]->deleteRByName(r.getName());
+        if(nodes[i]->getResistorList()->getHead() == NULL){
+            // maintain the linked list
+            Node *previous = nodes[i]->getPrevious();
+            Node *next = nodes[i]->getNext();
+            if(previous != NULL) {
+                previous->setNext(next);
+            }else{
+                head = next;
+            }
+            if(next != NULL)
+                next->setPrevious(previous);
+            delete nodes[i];
+        }
+    }
 }
 
 void NodeList::solve() {

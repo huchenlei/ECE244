@@ -80,4 +80,8 @@ Inserted: resistor Rnew 100.00 Ohms -5000 -> 3333
 Error: resistor RINeverCreated not found
 > insertR Rnew 240 2 4
 Error: resistor Rnew already exists
+> deleteR Rnew
+Deleted: resistor Rnew
+> printNode all
+something
 >

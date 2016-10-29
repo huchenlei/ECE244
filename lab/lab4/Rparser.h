@@ -26,7 +26,6 @@ using namespace std;
  * as a field in order to facilitate the searching of resistors by their names, i.e. when inserting
  * a resistor, the resistor it self is added to the global resistorList, and two copies(on heap) are
  * add to the resistorList of Nodes the resistor is connected to.
- *
  */
 class Rparser {
 private:
@@ -62,6 +61,8 @@ public:
 //user input checking functions
 void check_resistance(double resistance);
 
+//@deprecated
+// since the printR all branch no longer exists
 void check_name(string name);
 
 void check_connection(int node1, int node2);
