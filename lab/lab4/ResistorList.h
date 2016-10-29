@@ -8,6 +8,16 @@
 #include "Resistor.h"
 #include <sstream>
 
+/*
+ * The ResistorList class is an implementation of Two-Way linked list, with the length maintained by a private field
+ * each time the new resistor coming in, it would be append to the end of the list( why there is a field called end)
+ *
+ * There is a possible way to get rid of field end:
+ * connect the last element's next field to the head element, then the previous field of head element would point
+ * to the last element. While that might bring some confusion on looping conditions, the ResistorList is not
+ * implemented that way.
+ */
+
 class ResistorList {
 private:
     Resistor *head;

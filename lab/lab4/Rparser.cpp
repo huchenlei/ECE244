@@ -15,7 +15,7 @@ Rparser::~Rparser() {
 }
 
 string Rparser::parse(const string &s) {
-    vector<string> raw_cmd = split(s, ' ');
+    myVector raw_cmd = split(s, ' ');
     string cmd = raw_cmd[0];
     try {
         if (cmd == "insertR") {
@@ -44,15 +44,18 @@ string Rparser::parse(const string &s) {
     } catch (r_list_exception &e) {
         return e.msg;
     } catch (exception &e) {
+        // casting error by stoi/stod
         return "Error: invalid argument";
     }
+
 }
 
-string Rparser::insertR(vector<string> &raw_cmd) {
+string Rparser::insertR(myVector &raw_cmd) {
     check_args_few(raw_cmd, 4);
 
     string name = raw_cmd[1];
-    check_name(name);
+// resistor name can now be "all"
+//    check_name(name);
 
     double resistance = stod(raw_cmd[2]);
     check_resistance(resistance);
@@ -77,7 +80,7 @@ string Rparser::insertR(vector<string> &raw_cmd) {
 }
 
 
-string Rparser::modifyR(vector<string> &raw_cmd) {
+string Rparser::modifyR(myVector &raw_cmd) {
     string name = raw_cmd[1];
     check_name(name);
 
@@ -98,7 +101,7 @@ string Rparser::modifyR(vector<string> &raw_cmd) {
            " Ohms";
 }
 
-string Rparser::printNode(vector<string> &raw_cmd) {
+string Rparser::printNode(myVector &raw_cmd) {
     check_args(raw_cmd, 1);
     if (raw_cmd[1] == "all") {
         stringstream ss;
@@ -115,7 +118,7 @@ string Rparser::printNode(vector<string> &raw_cmd) {
     }
 }
 
-string Rparser::printR(vector<string> &raw_cmd) {
+string Rparser::printR(myVector &raw_cmd) {
     check_args(raw_cmd, 1);
     string name = raw_cmd[1];
     stringstream ss;
@@ -123,7 +126,7 @@ string Rparser::printR(vector<string> &raw_cmd) {
     return "Print:\n" + ss.str();
 }
 
-string Rparser::deleteR(vector<string> &raw_cmd) {
+string Rparser::deleteR(myVector &raw_cmd) {
     check_args(raw_cmd, 1);
     if (raw_cmd[1] == "all") {
         delete resistorList;
@@ -139,7 +142,7 @@ string Rparser::deleteR(vector<string> &raw_cmd) {
     }
 }
 
-string Rparser::setV(vector<string> &raw_cmd) {
+string Rparser::setV(myVector &raw_cmd) {
     check_args(raw_cmd, 2);
     int nodeIndex = stoi(raw_cmd[1]);
     double voltage = stod(raw_cmd[2]);
@@ -149,17 +152,17 @@ string Rparser::setV(vector<string> &raw_cmd) {
     return "Set: node " + raw_cmd[1] + " to " + to_str(voltage, 2) + " Volts";
 }
 
-string Rparser::unsetV(vector<string> &raw_cmd) {
+string Rparser::unsetV(myVector &raw_cmd) {
     check_args(raw_cmd, 1);
     int nodeIndex = stoi(raw_cmd[1]);
     nodeList->findOrInsertNode(nodeIndex)->setSource(false);
     return "Unset: the solver will determine the voltage of node " + raw_cmd[1];
 }
 
-string Rparser::solve(vector<string> &raw_cmd) {
+string Rparser::solve(myVector &raw_cmd) {
     check_args(raw_cmd, 0);
     nodeList->solve();
-    return "Solve:\n" + nodeList->voltageInfo();
+    return "Solve:" + nodeList->voltageInfo();
 }
 
 // methods for checking input
@@ -170,6 +173,7 @@ void check_resistance(double resistance) {
     }
 }
 
+// @deprecated
 void check_name(string name) {
     if (name == "all") {
         args_exception ae("Error: resistor name cannot be the keyword \"all\"");
@@ -185,20 +189,20 @@ void check_connection(int node1, int node2) {
 }
 
 // n is expected args number
-void check_args(vector<string> raw_cmd, int n) {
+void check_args(myVector &raw_cmd, int n) {
     check_args_few(raw_cmd, n);
     check_args_more(raw_cmd, n);
 }
 
-void check_args_few(vector<string> raw_cmd, int n) {
-    if ((int) (raw_cmd.size()) < n + 1) {
+void check_args_few(myVector &raw_cmd, int n) {
+    if (raw_cmd.getSize() < n + 1) {
         args_exception ae("Error: too few arguments");
         throw ae;
     }
 }
 
-void check_args_more(vector<string> raw_cmd, int n) {
-    if ((int) (raw_cmd.size()) > n + 1) {
+void check_args_more(myVector &raw_cmd, int n) {
+    if (raw_cmd.getSize() > n + 1) {
         args_exception ae("Error: too many arguments");
         throw ae;
     }
@@ -219,12 +223,6 @@ string to_str(int n) {
     return ss.str();
 }
 
-string to_str(double d) {
-    stringstream ss;
-    ss << d;
-    return ss.str();
-}
-
 //with decimal places specified
 string to_str(double d, int n) {
     stringstream ss;
@@ -232,8 +230,47 @@ string to_str(double d, int n) {
     return ss.str();
 }
 
-vector<string> split(const string &s, char sep) {
-    vector<string> elems;
+myVector::myVector() :size(DEFAULT_VECTOR_SIZE), currentCursor(0) {
+    // default capacity 5
+    capsule = new string[DEFAULT_VECTOR_SIZE]();
+}
+
+myVector::myVector(int size) : size(size), currentCursor(0) {
+    capsule = new string[size]();
+}
+
+string &myVector::operator[](const int index) {
+    if (index < 0) {
+        args_exception ae("Error: myVector index can not be negative");
+        throw ae;
+    }
+    if (index >= size) {
+        // expand the array
+        string *newCapsule = new string[index]();
+        size = index;
+        for (int i = 0; i < size; ++i)
+            newCapsule[i] = capsule[i];
+        delete [] capsule;
+        capsule = newCapsule;
+    }
+    return capsule[index];
+}
+
+int myVector::getSize() const {
+    return currentCursor;
+}
+
+void myVector::push_back(const string &s) {
+    (*this)[currentCursor] = s;
+    currentCursor++;
+}
+
+myVector::~myVector() {
+    delete [] capsule;
+}
+
+myVector split(const string &s, char sep) {
+    myVector elems;
     stringstream ss;
     ss.str(s);
     string item;
@@ -244,3 +281,4 @@ vector<string> split(const string &s, char sep) {
     }
     return elems;
 }
+

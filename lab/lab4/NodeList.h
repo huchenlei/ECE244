@@ -10,12 +10,15 @@
 #include "Node.h"
 #include <iomanip>
 
+/*
+ * Similar to ResistorList
+ * the solve method(with some of its encapsulated functions as private methods)
+ * balance the entire node map with KCL
+ */
 
 class NodeList {
 private:
     Node *head;
-
-    Node *end;
 
     //returns the Iteration change
     double solveNode(Node *node);

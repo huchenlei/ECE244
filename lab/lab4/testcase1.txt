@@ -1,0 +1,9 @@
+> insertR Rnew 100 -5000 3333
+Inserted: resistor Rnew 100.00 Ohms -5000 -> 3333
+> insertR Rnew 240 2 4
+Error: resistor Rnew already exists
+> deleteR Rnew
+Deleted: resistor Rnew
+> printNode all
+something
+>
