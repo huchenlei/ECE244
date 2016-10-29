@@ -70,9 +70,8 @@ Node *NodeList::findOrInsertNode(const int index) {
 
 void NodeList::deleteR(const Resistor &r) {
     Node *nodes[2];
-    nodes[0] = findNodeByIndex(r.getEndpointNodeIDs()[0]);
-    nodes[1] = findNodeByIndex(r.getEndpointNodeIDs()[1]);
     for (int i = 0; i < 2; ++i) {
+        nodes[i] = findNodeByIndex(r.getEndpointNodeIDs()[i]);
         nodes[i]->deleteRByName(r.getName());
         if(nodes[i]->getResistorList()->getHead() == NULL){
             // maintain the linked list
