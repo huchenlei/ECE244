@@ -11,7 +11,6 @@
       <sourceFolder url="file://$MODULE_DIR$/NodeList.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Resistor.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ResistorList.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/debug.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Resistor.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Rparser.h" isTestSource="false" />

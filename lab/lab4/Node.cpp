@@ -3,7 +3,6 @@
 //
 
 #include "Node.h"
-#include "debug.h"
 
 Node::~Node() {
     delete resistorList;

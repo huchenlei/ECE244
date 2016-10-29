@@ -7,6 +7,12 @@
 
 using namespace std;
 
+/*
+ * The Resistor class is responsible for holding data, and is part of the design of ResistorList(Linked List)
+ * Since the Node class already includes Resistor.h, to avoid compiler link error, nodes the resistor
+ * is connected to is not specified by Pointers to Node, instead, array of nodeIndex.
+ */
+
 class Resistor {
 private:
     int rIndex;
@@ -27,6 +33,7 @@ public:
 
     ~Resistor();
 
+    // creates a copy on heap(with "new" statement)
     Resistor* deepCopy();
 
     string getName() const; // returns the name

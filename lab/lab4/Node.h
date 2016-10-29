@@ -15,6 +15,12 @@
 #include <vector>
 #include "ResistorList.h"
 
+/*
+ * Data Holding Class
+ * as part of the design of NodeList(Linked List)
+ * similar to Resistor Class
+ */
+
 using namespace std;
 
 class Node {

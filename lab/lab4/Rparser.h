@@ -13,10 +13,21 @@
 #include "NodeList.h"
 #include "ResistorList.h"
 
-#define MIN_NODE_NUMBER 0
-
 using namespace std;
-
+/*
+ * The Rparser class handles the command input from keyboard(or possibly any other source)
+ * and return the result as string to be output to any given destination(terminal or text file)
+ *
+ * parse: detect command name and forward request to corresponding handling methods
+ * handling methods: take vector command as input, return the string processed
+ *
+ * the Rparser class has a field nodeList for saving node information
+ * each node has its own resistorList, while Rparser still maintain a global copy of resistorList
+ * as a field in order to facilitate the searching of resistors by their names, i.e. when inserting
+ * a resistor, the resistor it self is added to the global resistorList, and two copies(on heap) are
+ * add to the resistorList of Nodes the resistor is connected to.
+ *
+ */
 class Rparser {
 private:
     NodeList *nodeList;
@@ -29,6 +40,7 @@ public:
 
     string parse(const string &s);
 
+    //handling methods
     string insertR(vector<string> &raw_cmd);
 
     string modifyR(vector<string> &raw_cmd);

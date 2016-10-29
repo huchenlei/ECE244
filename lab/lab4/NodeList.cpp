@@ -52,7 +52,7 @@ Node *NodeList::findOrInsertNode(const int index) {
                 currentNode->setNext(node);
                 break;
             }
-            // in the middle
+            // middle case
             Node *next = currentNode->getNext();
             if (node->getNodeIndex() > currentNode->getNodeIndex() &&
                 node->getNodeIndex() < next->getNodeIndex()) {
@@ -81,11 +81,11 @@ void NodeList::deleteR(const Resistor &r) {
 
 void NodeList::solve() {
     double minIterationChange = INITIAL_CHANGE;
-    // pre set
-    setUp();
     // empty list case
     if (head == NULL)
         return;
+    // pre set
+    setUp();
     while (minIterationChange > MIN_ITERATION_CHANGE) {
         // walk through all nodes
         Node *currentNode = head;
@@ -99,7 +99,6 @@ void NodeList::solve() {
 }
 
 double NodeList::solveNode(Node *node) {
-//    cout << "this is node " << node->getNodeIndex() << endl;
     if (node->isSource())
         return INITIAL_CHANGE;
 
@@ -110,18 +109,12 @@ double NodeList::solveNode(Node *node) {
     for (int i = 0; i < node->getResistorList()->getLength(); ++i) {
         R_1 += 1 / resistanceList[i];
         V += voltageList[i] / resistanceList[i];
-//        cout << "resistance of " << i << " is " << resistanceList[i] << endl;
-//        cout << "vol of " << i << " is " << voltageList[i] << endl;
     }
     delete voltageList;
     delete resistanceList;
     double newVoltage = (1 / R_1) * V;
     node->setVoltage(newVoltage);
 
-//    cout << "old v is " << oldVoltage << endl;
-//    cout << "new v is " << newVoltage << endl;
-//    cout << node->getVoltage() << endl;
-//    cout << "\n";
     if (oldVoltage == 0 && newVoltage == 0) {
         return INITIAL_CHANGE;
     } else {
@@ -149,10 +142,8 @@ double *NodeList::getVoltages(Node *node) {
         const int *endpoints = currentR->getEndpointNodeIDs();
         if (endpoints[0] == nodeIndex) {
             voltageList[i] = findNodeByIndex(endpoints[1])->getVoltage();
-//            cout << "the v of node " << endpoints[1] << " is " << voltageList[i] << endl;
         } else {
             voltageList[i] = findNodeByIndex(endpoints[0])->getVoltage();
-//            cout << "the v of node " << endpoints[0] << " is " << voltageList[i] << endl;
         }
         currentR = currentR->getNext();
     }
@@ -180,9 +171,8 @@ string NodeList::voltageInfo() {
     stringstream ss;
     Node *currentNode = head;
     while (currentNode != NULL) {
-        ss << setprecision(2) << fixed << "Node " << currentNode->getNodeIndex() << ": "
-           << currentNode->getVoltage() << " V"
-           << "\n";
+        ss << "\n" << setprecision(2) << fixed << "Node " << currentNode->getNodeIndex() << ": "
+           << currentNode->getVoltage() << " V";
         currentNode = currentNode->getNext();
     }
     return ss.str();
