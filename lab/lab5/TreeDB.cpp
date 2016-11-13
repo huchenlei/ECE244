@@ -225,12 +225,12 @@ void TreeDB::populateVector(myVector &m) {
 }
 
 // wheels
-myVector::myVector() {
+myVector::myVector() : currentCursor(0){
     // default capacity 5
     capsule = new DBentry *[DEFAULT_VECTOR_SIZE]();
 }
 
-myVector::myVector(int size) : size(size) {
+myVector::myVector(int size) : size(size), currentCursor(0){
     capsule = new DBentry *[size]();
 }
 

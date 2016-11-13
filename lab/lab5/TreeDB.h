@@ -15,8 +15,8 @@
 // vector elements would be sorted by their name
 class myVector {
 private:
-    int size = DEFAULT_VECTOR_SIZE;
-    int currentCursor = 0;
+    int size;
+    int currentCursor;
     DBentry **capsule;
 
     int selectAndShuffle(DBentry **arr, int begin, int end);
