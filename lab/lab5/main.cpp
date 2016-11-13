@@ -62,8 +62,6 @@ int main() {
                 dBentry->setActive(active);
                 cout << "Success" << endl;
             }
-        } else{
-            cout << "Error: unknown command" << endl;
         }
     }
     treeDB.clear();

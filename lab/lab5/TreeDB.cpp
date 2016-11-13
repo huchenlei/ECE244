@@ -5,7 +5,7 @@
 #include "TreeDB.h"
 
 // initialize static member field
-int TreeDB::probesCount = 0;
+int TreeDB::probesCount = 1;
 
 TreeDB::TreeDB() : root(NULL) {}
 
