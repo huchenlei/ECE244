@@ -7,7 +7,7 @@
 Node *NodeList::findNodeByIndex(const int index) const {
     Node *currentNode = head;
     if (head == NULL) {
-        n_list_exception nl("Error: node " + to_string(index) + " not found");
+      n_list_exception nl("Error: node " + to_string((long long)index) + " not found");
         throw nl;
     }
     while (true) {
@@ -17,7 +17,7 @@ Node *NodeList::findNodeByIndex(const int index) const {
                 continue;
             } else {
                 // not found
-                n_list_exception nl("Error: node " + to_string(index) + " not found");
+	      n_list_exception nl("Error: node " + to_string((long long)index) + " not found");
                 throw nl;
             }
         } else {

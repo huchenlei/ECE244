@@ -14,6 +14,7 @@ Node::Node() {
 }
 
 Node::~Node() {
+
 }
 
 Node::Node(int nodeIndex_) {

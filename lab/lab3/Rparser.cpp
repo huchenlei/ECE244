@@ -1,7 +1,7 @@
 //
 // Created by CharlieHu on 2016-10-08.
 //
-
+    
 #include "Rparser.h"
 
 Rparser::Rparser() {}
@@ -187,7 +187,7 @@ void Rparser::insert_resistor(string &name, double resistance, int node1, int no
         }
     }
     //if found
-    args_exception ae("Error: Resistor " + name + " already exists");
+    args_exception ae("Error: resistor " + name + " already exists");
     throw ae;
 }
 
@@ -272,7 +272,7 @@ Resistor *Rparser::find_resistor_by_name(string &name) {
             return resistorArray[i];
         }
     }
-    args_exception ae("Error: Resistor " + name + " not found");
+    args_exception ae("Error: resistor " + name + " not found");
     throw ae;
 }
 

@@ -22,7 +22,12 @@ Resistor::Resistor(string &name, double resistance, int *endpoints) {
     Resistor::endpointNodeIDs[1] = endpoints[1];
 }
 
+<<<<<<< HEAD
+Resistor::~Resistor() {
+}
+=======
 Resistor::~Resistor() {}
+>>>>>>> 33d420d9790d54ea64b519ba479bbcdd196f172f
 
 //getters and setters
 string Resistor::getName() const {
@@ -55,7 +60,6 @@ const int *Resistor::getEndpointNodeIDs() const {
 
 ostream &operator<<(ostream &os, const Resistor &resistor) {
     int resistance = (int) (resistor.resistance);
-//    os << resistor.getName() << "_________________ ";
     os << resistor.getName() << "                  ";
     //format output
     while (resistance < 10000) {
