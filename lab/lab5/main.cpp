@@ -7,6 +7,12 @@ int main() {
 
     TreeDB treeDB;
 
+    treeDB.insert(new DBentry("a" , 11 , true));
+    treeDB.insert(new DBentry("b" , 11 , true));
+    treeDB.insert(new DBentry("c" , 11 , true));
+
+    treeDB.printall();
+
     while (!cin.eof()) {
         cout << "> ";
         string raw_cmd;

@@ -5,7 +5,7 @@
 #include "TreeDB.h"
 
 // initialize static member field
-int TreeDB::probesCount = 1;
+int TreeDB::probesCount = 0;
 
 TreeDB::TreeDB() : root(NULL) {}
 
@@ -64,6 +64,7 @@ TreeNode *TreeDB::findNode(const string name) {
     TreeNode *result = NULL;
     int compareResult = root->getEntryPtr()->getName().compare(name);
     if (compareResult == 0) {
+        probesCount++;
         result = root;
     } else if (compareResult > 0) {
         // go to left side(root > name)
@@ -208,7 +209,8 @@ void TreeDB::printall() {
     populateVector(db);
     db.sort();
     for (int i = 0; i < db.getSize(); ++i) {
-        cout << *(db[i]) << endl;
+        db[i]->printInfo();
+//        cout << *(db[i]) << endl;
     }
 }
 
