@@ -93,22 +93,37 @@ float Polygon::getDistanceBetweenPoints(t_point start, t_point end) const {
 }
 
 t_point Polygon::computeCenter() {
-    float totalArea = 0;
-    float totalAreaTimesX = 0;
-    float totalAreaTimesY = 0;
-    for (int i = 1; i < nPoint - 1; ++i) {
-        float area = crossArea(polVertex[0], polVertex[i], polVertex[i + 1]);
-        totalArea += area;
-        // reuse code in Triangle
-        t_point tPoints[3] = {polVertex[0], polVertex[i], polVertex[i + 1]};
-        Triangle tri("null", "red", tPoints);
-        totalAreaTimesX += area * tri.getXcen();
-        totalAreaTimesY += area * tri.getYcen();
+// the following code compute the mass center of the shape which is not desired by
+// the lab
+//    float totalArea = 0;
+//    float totalAreaTimesX = 0;
+//    float totalAreaTimesY = 0;
+//    for (int i = 1; i < nPoint - 1; ++i) {
+//        float area = crossArea(polVertex[0], polVertex[i], polVertex[i + 1]);
+//        totalArea += area;
+//        // reuse code in Triangle
+//        t_point tPoints[3] = {polVertex[0], polVertex[i], polVertex[i + 1]};
+//        Triangle tri("null", "red", tPoints);
+//        totalAreaTimesX += area * tri.getXcen();
+//        totalAreaTimesY += area * tri.getYcen();
+//    }
+//    t_point result;
+//    result.x = totalAreaTimesX / totalArea;
+//    result.y = totalAreaTimesY / totalArea;
+//    return result;
+
+    // the lab require to compute simple center of the object
+    float xcen = 0, ycen = 0;
+    for (int i = 0; i < nPoint; ++i) {
+        xcen += polVertex[i].x;
+        ycen += polVertex[i].y;
     }
-    t_point result;
-    result.x = totalAreaTimesX / totalArea;
-    result.y = totalAreaTimesY / totalArea;
-    return result;
+    xcen /= nPoint;
+    ycen /= nPoint;
+    t_point p;
+    p.x = xcen;
+    p.y = ycen;
+    return p;
 }
 
 float Polygon::crossArea(t_point p1, t_point p2, t_point p3) const {
