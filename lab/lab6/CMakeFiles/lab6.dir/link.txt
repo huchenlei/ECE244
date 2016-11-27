@@ -1,0 +1,1 @@
+/usr/bin/c++    -std=c++11 -L/usr/X11/lib -lX11    CMakeFiles/lab6.dir/Main.cpp.o CMakeFiles/lab6.dir/easygl.cpp.o CMakeFiles/lab6.dir/graphics.cpp.o CMakeFiles/lab6.dir/Shape.cpp.o CMakeFiles/lab6.dir/ShapeArray.cpp.o CMakeFiles/lab6.dir/Triangle.cpp.o CMakeFiles/lab6.dir/Rectangle.cpp.o CMakeFiles/lab6.dir/Circle.cpp.o CMakeFiles/lab6.dir/Polygon.cpp.o  -o lab6 -rdynamic 

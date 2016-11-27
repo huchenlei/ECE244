@@ -25,7 +25,7 @@ Polygon::~Polygon() {
 
 void Polygon::print() const {
     Shape::print();
-    cout << "Polygon";
+    cout << "polygon";
     for (int i = 0; i < nPoint; ++i) {
         cout << " (" << polVertex[i].x << ","
              << polVertex[i].y << ")";

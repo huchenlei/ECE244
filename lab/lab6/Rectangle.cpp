@@ -18,9 +18,9 @@ Rectangle::~Rectangle() {
 
 void Rectangle::print() const {
     Shape::print();
-    cout << "Rectangle "<< setprecision(1) << fixed;
+    cout << "rectangle "<< setprecision(1) << fixed;
     cout << "width: " << width;
-    cout << "height: " << height;
+    cout << " height: " << height;
     cout << endl;
 }
 
