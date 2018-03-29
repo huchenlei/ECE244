@@ -45,7 +45,6 @@ public:
     // returns whether or not this entry is active.
     bool getActive() const;
 
-    void printInfo() const;
     // prints the entry in the format
     // name : IPaddress : active  followed by newline
     // active is printed as a string (active or inactive)

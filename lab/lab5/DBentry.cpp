@@ -51,12 +51,3 @@ ostream &operator<<(ostream &out, const DBentry &rhs) {
     }
     return out;
 }
-
-void DBentry::printInfo() const {
-    cout << name <<  " : " << IPaddress << " : ";
-    if(active){
-        cout << "active\n";
-    }else{
-        cout << "inactive\n";
-    }
-}

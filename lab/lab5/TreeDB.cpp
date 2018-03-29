@@ -11,8 +11,7 @@ TreeDB::TreeDB() : root(NULL) {}
 
 TreeDB::TreeDB(TreeNode *root) : root(root) {}
 
-TreeDB::~TreeDB() {
-}
+TreeDB::~TreeDB() {}
 
 bool TreeDB::insert(DBentry *newEntry) {
     // special case when the DB is empty
@@ -46,6 +45,7 @@ bool TreeDB::insert(DBentry *newEntry) {
         TreeDB subTree(root->getRight());
         return subTree.insert(newEntry);
     }
+    return true;
 }
 
 DBentry *TreeDB::find(const string name) {
@@ -209,8 +209,7 @@ void TreeDB::printall() {
     populateVector(db);
     db.sort();
     for (int i = 0; i < db.getSize(); ++i) {
-        db[i]->printInfo();
-//        cout << *(db[i]) << endl;
+        cout << *(db[i]) << endl;
     }
 }
 
@@ -237,10 +236,6 @@ myVector::myVector(int size) : size(size), currentCursor(0){
 }
 
 DBentry *&myVector::operator[](const int index) {
-    if (index < 0) {
-//        args_exception ae("Error: myVector index can not be negative");
-//        throw ae;
-    }
     if (index >= size) {
         // expand the array
         DBentry **newCapsule = new DBentry *[index + 1]();

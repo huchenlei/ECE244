@@ -1,0 +1,6 @@
+# exams
+Exams/*
+
+# IDE files
+.idea/
+nbproject/

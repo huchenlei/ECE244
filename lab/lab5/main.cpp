@@ -7,11 +7,15 @@ int main() {
 
     TreeDB treeDB;
 
-//    treeDB.insert(new DBentry("a" , 11 , true));
-//    treeDB.insert(new DBentry("b" , 11 , true));
-//    treeDB.insert(new DBentry("c" , 11 , true));
-//
-//    treeDB.printall();
+    // the test has memory leak
+    treeDB.insert(new DBentry("a" , 11 , true));
+    treeDB.insert(new DBentry("b" , 11 , true));
+    treeDB.insert(new DBentry("c" , 11 , true));
+    treeDB.insert(new DBentry("d" , 11 , true));
+    treeDB.insert(new DBentry("e" , 11 , true));
+    treeDB.insert(new DBentry("ads" , 11 , true));
+    treeDB.find("something not in the tree");
+    treeDB.printall();
 
     while (!cin.eof()) {
         cout << "> ";
